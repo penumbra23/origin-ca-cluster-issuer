@@ -12,7 +12,7 @@ spec:
     listKind: OriginIssuerList
     plural: originissuers
     singular: originissuer
-  scope: Namespaced
+  scope: Cluster
   versions:
   - name: v1
     schema:
@@ -51,9 +51,13 @@ spec:
                         description: Name of the secret in the OriginIssuer's namespace
                           to select from.
                         type: string
+                      namespace:
+                        description: Namespace of the secret
+                        type: string
                     required:
                     - key
                     - name
+                    - namespace
                     type: object
                 type: object
               requestType:

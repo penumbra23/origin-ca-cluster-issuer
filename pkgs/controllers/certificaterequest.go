@@ -105,7 +105,8 @@ func (r *CertificateRequestController) Reconcile(ctx context.Context, cr *certma
 
 	iss := v1.OriginIssuer{}
 	issNamespaceName := types.NamespacedName{
-		Namespace: cr.Namespace,
+		// Doesn't restrict to any namespace, so search is cluster wide
+		Namespace: "",
 		Name:      cr.Spec.IssuerRef.Name,
 	}
 
