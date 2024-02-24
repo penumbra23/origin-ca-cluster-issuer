@@ -45,7 +45,7 @@ func (r *OriginIssuerController) Reconcile(ctx context.Context, iss *v1.OriginIs
 
 	secret := core.Secret{}
 	secretNamespaceName := types.NamespacedName{
-		Namespace: iss.Namespace,
+		Namespace: iss.Spec.Auth.ServiceKeyRef.Namespace,
 		Name:      iss.Spec.Auth.ServiceKeyRef.Name,
 	}
 
@@ -87,7 +87,7 @@ func (r *OriginIssuerController) Reconcile(ctx context.Context, iss *v1.OriginIs
 	}
 
 	// TODO: GC these references once the OriginIssuer has been removed.
-	r.Collection.Store(types.NamespacedName{Name: iss.Name, Namespace: iss.Namespace}, p)
+	r.Collection.Store(types.NamespacedName{Name: iss.Name}, p)
 
 	return reconcile.Result{}, r.setStatus(ctx, iss, v1.ConditionTrue, "Verified", "OriginIssuer verified and ready to sign certificates")
 }

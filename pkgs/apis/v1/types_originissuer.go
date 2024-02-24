@@ -63,7 +63,9 @@ type SecretKeySelector struct {
 	// Name of the secret in the OriginIssuer's namespace to select from.
 	Name string `json:"name"`
 	// Key of the secret to select from. Must be a valid secret key.
-	Key string `json:"key"`
+	Key       string `json:"key"`
+	// Namespace where secret is located.
+	Namespace string `json:"namespace"`
 }
 
 // OriginIssuerCondition contains condition information for the OriginIssuer.
