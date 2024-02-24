@@ -15,8 +15,8 @@ spec:
     spec:
       serviceAccountName: originissuer-control
       containers:
-        - image: cloudflare/origin-ca-issuer:v0.7.0
-          name: origin-ca-controller
+        - image: penumbra23/origin-ca-cluster-controller:latest
+          name: origin-ca-cluster-controller
           resources:
             limits:
               cpu: 100m

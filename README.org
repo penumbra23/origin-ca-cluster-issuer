@@ -60,7 +60,11 @@ spec:
     serviceKeyRef:
       name: service-key
       key: key
+      namespace: default
 #+END_SRC
+
+**NOTE**: The ServiceKey secret doesn't have to be in the same namespace as the OriginIssuer, because it's being
+referenced under `serviceKeyRef`.
 
 #+BEGIN_EXAMPLE
 $ kubectl apply -f service-key.yaml -f issuer.yaml
@@ -113,13 +117,18 @@ Note that the Origin CA API has stricter limitations than the Certificate object
 
 ** Ingress Certificate
 You can use cert-manager's support for [[https://cert-manager.io/docs/usage/ingress/][Securing Ingress Resources]] along with the Origin CA Issuer to automatically create and renew certificates for Ingress resources, without needing to create a Certificate resource manually.
+As this is a cluster-wide resource, any ingress from any namespace can use it, but there's a bit more to it.
+
+**IMPORTANT**: To have the cert-manager reference the correct issuer, please set all of the annotation mentioned in the
+below example (that is, `issuer` is the name of your issuer, `issuer-kind: OriginIssuer` and `issuer-group: cert-manager.k8s.cloudflare.com`). 
 
 #+BEGIN_SRC yaml :tangle ./deploy/example/ingress.yaml :comments link
 apiVersion: networking/v1
 kind: Ingress
 metadata:
   annotations:
-    # Reference the Origin CA Issuer you created above, which must be in the same namespace.
+    # Reference the Origin CA Issuer you created above.
+    # NOTE: set all three annotations
     cert-manager.io/issuer: prod-issuer
     cert-manager.io/issuer-kind: OriginIssuer
     cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
