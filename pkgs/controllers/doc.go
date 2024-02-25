@@ -1,3 +1,3 @@
-// Package controllers implements the OriginIssuer and CertificateRequest
+// Package controllers implements the OriginClusterIssuer and CertificateRequest
 // Kubernetes controllers.
 package controllers

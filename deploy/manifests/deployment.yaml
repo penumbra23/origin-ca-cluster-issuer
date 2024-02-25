@@ -13,7 +13,7 @@ spec:
       labels:
         app: origin-ca-issuer
     spec:
-      serviceAccountName: originissuer-control
+      serviceAccountName: originclusterissuer-control
       containers:
         - image: penumbra23/origin-ca-cluster-controller:latest
           name: origin-ca-cluster-controller

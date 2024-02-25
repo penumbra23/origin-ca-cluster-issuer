@@ -21,7 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
 
-func TestOriginIssuerReconcile(t *testing.T) {
+func TestOriginClusterIssuerReconcile(t *testing.T) {
 	if err := cmapi.AddToScheme(scheme.Scheme); err != nil {
 		t.Fatal(err)
 	}
@@ -36,21 +36,21 @@ func TestOriginIssuerReconcile(t *testing.T) {
 	tests := []struct {
 		name          string
 		objects       []runtime.Object
-		expected      v1.OriginIssuerStatus
+		expected      v1.OriginClusterIssuerStatus
 		error         string
 		namespaceName types.NamespacedName
 	}{
 		{
 			name: "working with secrets",
 			objects: []runtime.Object{
-				&v1.OriginIssuer{
+				&v1.OriginClusterIssuer{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      "foo",
 						Namespace: "default",
 					},
-					Spec: v1.OriginIssuerSpec{
+					Spec: v1.OriginClusterIssuerSpec{
 						RequestType: v1.RequestTypeOriginRSA,
-						Auth: v1.OriginIssuerAuthentication{
+						Auth: v1.OriginClusterIssuerAuthentication{
 							ServiceKeyRef: v1.SecretKeySelector{
 								Name: "issuer-service-key",
 								Key:  "key",
@@ -68,14 +68,14 @@ func TestOriginIssuerReconcile(t *testing.T) {
 					},
 				},
 			},
-			expected: v1.OriginIssuerStatus{
-				Conditions: []v1.OriginIssuerCondition{
+			expected: v1.OriginClusterIssuerStatus{
+				Conditions: []v1.OriginClusterIssuerCondition{
 					{
 						Type:               v1.ConditionReady,
 						Status:             v1.ConditionTrue,
 						LastTransitionTime: &now,
 						Reason:             "Verified",
-						Message:            "OriginIssuer verified and ready to sign certificates",
+						Message:            "OriginClusterIssuer verified and ready to sign certificates",
 					},
 				},
 			},
@@ -87,14 +87,14 @@ func TestOriginIssuerReconcile(t *testing.T) {
 		{
 			name: "missing secret",
 			objects: []runtime.Object{
-				&v1.OriginIssuer{
+				&v1.OriginClusterIssuer{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      "foo",
 						Namespace: "default",
 					},
-					Spec: v1.OriginIssuerSpec{
+					Spec: v1.OriginClusterIssuerSpec{
 						RequestType: v1.RequestTypeOriginRSA,
-						Auth: v1.OriginIssuerAuthentication{
+						Auth: v1.OriginClusterIssuerAuthentication{
 							ServiceKeyRef: v1.SecretKeySelector{
 								Name: "issuer-service-key",
 								Key:  "key",
@@ -103,8 +103,8 @@ func TestOriginIssuerReconcile(t *testing.T) {
 					},
 				},
 			},
-			expected: v1.OriginIssuerStatus{
-				Conditions: []v1.OriginIssuerCondition{
+			expected: v1.OriginClusterIssuerStatus{
+				Conditions: []v1.OriginClusterIssuerCondition{
 					{
 						Type:               v1.ConditionReady,
 						Status:             v1.ConditionFalse,
@@ -123,14 +123,14 @@ func TestOriginIssuerReconcile(t *testing.T) {
 		{
 			name: "secret missing key",
 			objects: []runtime.Object{
-				&v1.OriginIssuer{
+				&v1.OriginClusterIssuer{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      "foo",
 						Namespace: "default",
 					},
-					Spec: v1.OriginIssuerSpec{
+					Spec: v1.OriginClusterIssuerSpec{
 						RequestType: v1.RequestTypeOriginRSA,
-						Auth: v1.OriginIssuerAuthentication{
+						Auth: v1.OriginClusterIssuerAuthentication{
 							ServiceKeyRef: v1.SecretKeySelector{
 								Name: "issuer-service-key",
 								Key:  "key",
@@ -146,8 +146,8 @@ func TestOriginIssuerReconcile(t *testing.T) {
 					Data: map[string][]byte{},
 				},
 			},
-			expected: v1.OriginIssuerStatus{
-				Conditions: []v1.OriginIssuerCondition{
+			expected: v1.OriginClusterIssuerStatus{
+				Conditions: []v1.OriginClusterIssuerCondition{
 					{
 						Type:               v1.ConditionReady,
 						Status:             v1.ConditionFalse,
@@ -171,12 +171,12 @@ func TestOriginIssuerReconcile(t *testing.T) {
 			client := fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithRuntimeObjects(tt.objects...).
-				WithStatusSubresource(&v1.OriginIssuer{}).
+				WithStatusSubresource(&v1.OriginClusterIssuer{}).
 				Build()
 
 			collection := provisioners.CollectionWith(nil)
 
-			controller := &OriginIssuerController{
+			controller := &OriginClusterIssuerController{
 				Client: client,
 				Factory: cfapi.FactoryFunc(func(serviceKey []byte) (cfapi.Interface, error) {
 					return nil, nil
@@ -196,7 +196,7 @@ func TestOriginIssuerReconcile(t *testing.T) {
 				}
 			}
 
-			got := &v1.OriginIssuer{}
+			got := &v1.OriginClusterIssuer{}
 			if err := client.Get(context.TODO(), tt.namespaceName, got); err != nil {
 				t.Fatalf("expected to retrieve issuer from client: %s", err)
 			}

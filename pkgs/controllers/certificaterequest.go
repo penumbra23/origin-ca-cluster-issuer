@@ -32,7 +32,7 @@ type CertificateRequestController struct {
 // +kubebuilder:rbac:groups=cert-manager.io,resources=certificaterequests/status,verbs=get;update;patch
 
 // Reconcile reconciles CertificateRequest by fetching a Cloudflare API provisioner from
-// the referenced OriginIssuer, and providing the request's CSR.
+// the referenced OriginClusterIssuer, and providing the request's CSR.
 func (r *CertificateRequestController) Reconcile(ctx context.Context, cr *certmanager.CertificateRequest) (reconcile.Result, error) {
 	log := r.Log.WithValues("namespace", cr.Namespace, "certificaterequest", cr.Name)
 
@@ -103,7 +103,7 @@ func (r *CertificateRequestController) Reconcile(ctx context.Context, cr *certma
 		return reconcile.Result{}, nil
 	}
 
-	iss := v1.OriginIssuer{}
+	iss := v1.OriginClusterIssuer{}
 	issNamespaceName := types.NamespacedName{
 		// Doesn't restrict to any namespace, so search is cluster wide
 		Namespace: "",
@@ -111,16 +111,16 @@ func (r *CertificateRequestController) Reconcile(ctx context.Context, cr *certma
 	}
 
 	if err := r.Client.Get(ctx, issNamespaceName, &iss); err != nil {
-		log.Error(err, "failed to retrieve OriginIssuer resource", "namespace", issNamespaceName.Namespace, "name", issNamespaceName.Name)
-		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("Failed to retrieve OriginIssuer resource %s: %v", issNamespaceName, err))
+		log.Error(err, "failed to retrieve OriginClusterIssuer resource", "namespace", issNamespaceName.Namespace, "name", issNamespaceName.Name)
+		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("Failed to retrieve OriginClusterIssuer resource %s: %v", issNamespaceName, err))
 
 		return reconcile.Result{}, err
 	}
 
-	if !IssuerHasCondition(iss, v1.OriginIssuerCondition{Type: v1.ConditionReady, Status: v1.ConditionTrue}) {
+	if !IssuerHasCondition(iss, v1.OriginClusterIssuerCondition{Type: v1.ConditionReady, Status: v1.ConditionTrue}) {
 		err := fmt.Errorf("resource %s is not ready", issNamespaceName)
 		log.Error(err, "issuer failed readiness checks", "namespace", issNamespaceName.Namespace, "name", issNamespaceName.Name)
-		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("OriginIssuer %s is not Ready", issNamespaceName))
+		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("OriginClusterIssuer %s is not Ready", issNamespaceName))
 
 		return reconcile.Result{}, err
 	}
@@ -128,9 +128,9 @@ func (r *CertificateRequestController) Reconcile(ctx context.Context, cr *certma
 	p, ok := r.Collection.Load(issNamespaceName)
 	if !ok {
 		err := fmt.Errorf("provisioner %s not found", issNamespaceName)
-		log.Error(err, "failed to load provisioner for OriginIssuer resource")
+		log.Error(err, "failed to load provisioner for OriginClusterIssuer resource")
 
-		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("Failed to load provisioner for OriginIssuer resource %s", issNamespaceName))
+		_ = r.setStatus(ctx, cr, cmmeta.ConditionFalse, certmanager.CertificateRequestReasonPending, fmt.Sprintf("Failed to load provisioner for OriginClusterIssuer resource %s", issNamespaceName))
 
 		return reconcile.Result{}, err
 	}

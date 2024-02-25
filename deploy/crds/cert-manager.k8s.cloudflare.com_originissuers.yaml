@@ -4,22 +4,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: originissuers.cert-manager.k8s.cloudflare.com
+  name: originclusterissuers.cert-manager.k8s.cloudflare.com
 spec:
   group: cert-manager.k8s.cloudflare.com
   names:
-    kind: OriginIssuer
-    listKind: OriginIssuerList
-    plural: originissuers
-    singular: originissuer
+    kind: OriginClusterIssuer
+    listKind: OriginClusterIssuerList
+    plural: originclusterissuers
+    singular: originclusterissuer
   scope: Cluster
   versions:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: An OriginIssuer represents the Cloudflare Origin CA as an external
-          cert-manager issuer. It is scoped to a single namespace, so it can be used
-          only by resources in the same namespace.
+        description: An OriginClusterIssuer represents the Cloudflare Origin CA as an external
+          cert-manager issuer. The resource is a Cluster resource monitoring all certiicates inside
+          the cluster, not tied to a namespace.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -34,7 +34,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: Desired state of the OriginIssuer resource
+            description: Desired state of the OriginClusterIssuer resource
             properties:
               auth:
                 description: Auth configures how to authenticate with the Cloudflare
@@ -48,7 +48,7 @@ spec:
                           secret key.
                         type: string
                       name:
-                        description: Name of the secret in the OriginIssuer's namespace
+                        description: Name of the secret in the OriginClusterIssuer's namespace
                           to select from.
                         type: string
                       namespace:
@@ -72,14 +72,14 @@ spec:
             - requestType
             type: object
           status:
-            description: Status of the OriginIssuer. This is set and managed automatically.
+            description: Status of the OriginClusterIssuer. This is set and managed automatically.
             properties:
               conditions:
                 description: List of status conditions to indicate the status of an
-                  OriginIssuer Known condition types are `Ready`.
+                  OriginClusterIssuer Known condition types are `Ready`.
                 items:
-                  description: OriginIssuerCondition contains condition information
-                    for the OriginIssuer.
+                  description: OriginClusterIssuerCondition contains condition information
+                    for the OriginClusterIssuer.
                   properties:
                     lastTransitionTime:
                       description: LastTransitionTime is the timestamp corresponding

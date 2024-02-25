@@ -87,12 +87,12 @@ func main() {
 
 	err = builder.
 		ControllerManagedBy(mgr).
-		For(&v1.OriginIssuer{}).
-		Complete(reconcile.AsReconciler(mgr.GetClient(), &controllers.OriginIssuerController{
+		For(&v1.OriginClusterIssuer{}).
+		Complete(reconcile.AsReconciler(mgr.GetClient(), &controllers.OriginClusterIssuerController{
 			Client:     mgr.GetClient(),
 			Clock:      clock.RealClock{},
 			Factory:    f,
-			Log:        log.WithName("controllers").WithName("OriginIssuer"),
+			Log:        log.WithName("controllers").WithName("OriginClusterIssuer"),
 			Collection: collection,
 		}))
 

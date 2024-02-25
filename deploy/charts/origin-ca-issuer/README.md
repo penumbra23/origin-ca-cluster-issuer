@@ -13,7 +13,7 @@ Before installing the chart, you must first install [cert-manager](https://cert-
 
 ```shell
 VERSION="v0.7.0"
-kubectl apply -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/${VERSION}/deploy/crds/cert-manager.k8s.cloudflare.com_originissuers.yaml
+kubectl apply -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/${VERSION}/deploy/crds/cert-manager.k8s.cloudflare.com_originclusterissuers.yaml
 ```
 
 To install the chart with the release name `my-release`:
@@ -22,7 +22,7 @@ To install the chart with the release name `my-release`:
 helm install --name my-release oci://ghcr.io/cloudflare/origin-ca-issuer-charts/origin-ca-issuer --version 0.5.2
 ```
 
-In order to begin issuing certificates from the Cloudflare Origin CA you will need to set up an OriginIssuer. For more information, see the [documentation](https://github.com/cloudflare/origin-ca-issuer/blob/trunk/README.org).
+In order to begin issuing certificates from the Cloudflare Origin CA you will need to set up an OriginClusterIssuer. For more information, see the [documentation](https://github.com/cloudflare/origin-ca-issuer/blob/trunk/README.org).
 
 ## Uninstalling the Chart
 
@@ -35,7 +35,7 @@ If you want to completely uninstall origin-ca-issuer from your cluster, you also
 
 ``` shell
 VERSION="v0.7.0"
-kubectl delete -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/${VERSION}/deploy/crds/cert-manager.k8s.cloudflare.com_originissuers.yaml
+kubectl delete -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/${VERSION}/deploy/crds/cert-manager.k8s.cloudflare.com_originclusterissuers.yaml
 ```
 
 ## Configuration

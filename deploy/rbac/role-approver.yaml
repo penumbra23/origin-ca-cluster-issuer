@@ -13,4 +13,4 @@ rules:
   verbs:
   - approve
   resourceNames:
-  - originissuers.cert-manager.k8s.cloudflare.com/*
+  - originclusterissuers.cert-manager.k8s.cloudflare.com/*
