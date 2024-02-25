@@ -1,6 +1,6 @@
 // Package provisioners provides a mapping between CertificateRequest
 // and the Cloudflare API, with credentials already bounded by an
-// OriginIssuer.
+// OriginClusterIssuer.
 package provisioners
 
 import (

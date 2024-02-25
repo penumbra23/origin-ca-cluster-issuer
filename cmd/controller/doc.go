@@ -1,5 +1,5 @@
 /*
-Controller runs the OriginIssuer and CertificateRequest controllers
+Controller runs the OriginClusterIssuer and CertificateRequest controllers
 for the origin-ca-issuer project.
 
 Command Line

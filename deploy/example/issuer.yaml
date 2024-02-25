@@ -1,8 +1,9 @@
-# [[file:../../README.org::*Adding an OriginIssuer][Adding an OriginIssuer:2]]
+# [[file:../../README.org::*Adding an OriginClusterIssuer][Adding an OriginClusterIssuer:2]]
 apiVersion: cert-manager.k8s.cloudflare.com/v1
-kind: OriginIssuer
+kind: OriginClusterIssuer
 metadata:
   name: prod-issuer
+  # This can now be any other namespace
   namespace: default
 spec:
   requestType: OriginECC
@@ -10,4 +11,5 @@ spec:
     serviceKeyRef:
       name: service-key
       key: key
-# Adding an OriginIssuer:2 ends here
+      namespace: default
+# Adding an OriginClusterIssuer:2 ends here

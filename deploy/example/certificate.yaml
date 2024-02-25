@@ -16,6 +16,6 @@ spec:
   # Reference the Origin CA Issuer you created above, which must be in the same namespace.
   issuerRef:
     group: cert-manager.k8s.cloudflare.com
-    kind: OriginIssuer
+    kind: OriginClusterIssuer
     name: prod-issuer
 # Creating our first certificate:1 ends here

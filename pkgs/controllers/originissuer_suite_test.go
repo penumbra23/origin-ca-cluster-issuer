@@ -52,15 +52,15 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestOriginIssuerReconcileSuite(t *testing.T) {
-	issuer := &v1.OriginIssuer{
+func TestOriginClusterIssuerReconcileSuite(t *testing.T) {
+	issuer := &v1.OriginClusterIssuer{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "foo",
 			Namespace: "default",
 		},
-		Spec: v1.OriginIssuerSpec{
+		Spec: v1.OriginClusterIssuerSpec{
 			RequestType: v1.RequestTypeOriginRSA,
-			Auth: v1.OriginIssuerAuthentication{
+			Auth: v1.OriginClusterIssuerAuthentication{
 				ServiceKeyRef: v1.SecretKeySelector{
 					Name: "issuer-service-key",
 					Key:  "key",
@@ -93,7 +93,7 @@ func TestOriginIssuerReconcileSuite(t *testing.T) {
 		return nil, nil
 	})
 
-	controller := &OriginIssuerController{
+	controller := &OriginClusterIssuerController{
 		Client:     c,
 		Clock:      clock.RealClock{},
 		Factory:    f,
@@ -102,7 +102,7 @@ func TestOriginIssuerReconcileSuite(t *testing.T) {
 	}
 
 	builder.ControllerManagedBy(mgr).
-		For(&v1.OriginIssuer{}).
+		For(&v1.OriginClusterIssuer{}).
 		Complete(reconcile.AsReconciler(c, controller))
 
 	cancel, errChan := StartTestManager(mgr, t)
@@ -124,7 +124,7 @@ func TestOriginIssuerReconcileSuite(t *testing.T) {
 	defer c.Delete(context.TODO(), issuer)
 
 	Eventually(t, func() bool {
-		iss := v1.OriginIssuer{}
+		iss := v1.OriginClusterIssuer{}
 		namespacedName := types.NamespacedName{
 			Namespace: issuer.Namespace,
 			Name:      issuer.Name,
@@ -135,8 +135,8 @@ func TestOriginIssuerReconcileSuite(t *testing.T) {
 			return false
 		}
 
-		return IssuerHasCondition(iss, v1.OriginIssuerCondition{Type: v1.ConditionReady, Status: v1.ConditionTrue})
-	}, 5*time.Second, 10*time.Millisecond, "OriginIssuer reconciler")
+		return IssuerHasCondition(iss, v1.OriginClusterIssuerCondition{Type: v1.ConditionReady, Status: v1.ConditionTrue})
+	}, 5*time.Second, 10*time.Millisecond, "OriginClusterIssuer reconciler")
 
 	_, ok := controller.Collection.Load(types.NamespacedName{
 		Namespace: issuer.Namespace,

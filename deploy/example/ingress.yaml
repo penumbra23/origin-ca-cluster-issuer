@@ -1,11 +1,12 @@
 # [[file:../../README.org::*Ingress Certificate][Ingress Certificate:1]]
-apiVersion: networking/v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    # Reference the Origin CA Issuer you created above, which must be in the same namespace.
+    # Reference the Origin CA Issuer.
+    # NOTE: set all three annotations
     cert-manager.io/issuer: prod-issuer
-    cert-manager.io/issuer-kind: OriginIssuer
+    cert-manager.io/issuer-kind: OriginClusterIssuer
     cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
   name: example
   namespace: default

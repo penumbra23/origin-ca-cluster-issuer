@@ -63,25 +63,25 @@ func TestCertificateRequestReconcile(t *testing.T) {
 					})()),
 					cmgen.SetCertificateRequestIssuer(cmmeta.ObjectReference{
 						Name:  "foobar",
-						Kind:  "OriginIssuer",
+						Kind:  "OriginClusterIssuer",
 						Group: "cert-manager.k8s.cloudflare.com",
 					}),
 				),
-				&v1.OriginIssuer{
+				&v1.OriginClusterIssuer{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      "foobar",
 						Namespace: "default",
 					},
-					Spec: v1.OriginIssuerSpec{
-						Auth: v1.OriginIssuerAuthentication{
+					Spec: v1.OriginClusterIssuerSpec{
+						Auth: v1.OriginClusterIssuerAuthentication{
 							ServiceKeyRef: v1.SecretKeySelector{
 								Name: "service-key-issuer",
 								Key:  "key",
 							},
 						},
 					},
-					Status: v1.OriginIssuerStatus{
-						Conditions: []v1.OriginIssuerCondition{
+					Status: v1.OriginClusterIssuerStatus{
+						Conditions: []v1.OriginClusterIssuerCondition{
 							{
 								Type:   v1.ConditionReady,
 								Status: v1.ConditionTrue,

@@ -1,7 +1,7 @@
 // +k8s:deepcopy-gen=package
 // +groupName=cert-manager.k8s.cloudflare.com
 
-// Package v1 is the v1 version of the OriginIssuer API
+// Package v1 is the v1 version of the OriginClusterIssuer API
 package v1
 
 import (
@@ -23,5 +23,5 @@ var (
 )
 
 func init() {
-	SchemeBuilder.Register(&OriginIssuer{}, &OriginIssuerList{})
+	SchemeBuilder.Register(&OriginClusterIssuer{}, &OriginClusterIssuerList{})
 }
